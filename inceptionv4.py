@@ -173,7 +173,7 @@ def inception_v4_base(input):
 
     # 35 x 35 x 384
     # 4 x Inception-A blocks
-    for idx in xrange(4):
+    for idx in range(4):
       net = block_inception_a(net)
 
     # 35 x 35 x 384
@@ -182,7 +182,7 @@ def inception_v4_base(input):
 
     # 17 x 17 x 1024
     # 7 x Inception-B blocks
-    for idx in xrange(7):
+    for idx in range(7):
       net = block_inception_b(net)
 
     # 17 x 17 x 1024
@@ -191,7 +191,7 @@ def inception_v4_base(input):
 
     # 8 x 8 x 1536
     # 3 x Inception-C blocks
-    for idx in xrange(3):
+    for idx in range(3):
       net = block_inception_c(net)
 
     return net
@@ -250,7 +250,7 @@ def inception_v4_model(img_rows, img_cols, color_type=1, num_classes=None, dropo
     # Truncate and replace softmax layer for transfer learning
     # Cannot use model.layers.pop() since model is not of Sequential() type
     # The method below works since pre-trained weights are stored in layers but not in the model
-    net_ft = AveragePooling2D((8 cx,8), border_mode='valid')(net)
+    net_ft = AveragePooling2D((8,8), border_mode='valid')(net)
     net_ft = Dropout(dropout_keep_prob)(net_ft)
     net_ft = Flatten()(net_ft)
     predictions_ft = Dense(output_dim=num_classes, activation='softmax')(net_ft)
@@ -271,14 +271,13 @@ if __name__ == '__main__':
     channel = 3
     num_classes = 7
     batch_size = 16
-    nb_epoch = 16
 
     # Load our model
     model = inception_v4_model(img_width, img_height, channel, num_classes)
 
     # Step 1 - Collect Data
-    train_data_dir = os.path.expanduser("moods-old/training")
-    validation_data_dir = os.path.expanduser("moods-old/validation")
+    train_data_dir = os.path.expanduser("moods/training")
+    validation_data_dir = os.path.expanduser("moods/validation")
 
     # Rescale the input pixels
     datagen = ImageDataGenerator(rescale=1. / 255)
@@ -294,21 +293,18 @@ if __name__ == '__main__':
         target_size=(img_width, img_height),
         batch_size=32)
 
-    print(model.summary())
-    for i, layer in enumerate(model.layers):
-        print(i, layer.name)
-
-    nb_train_samples = 4410
-    nb_validation_samples = 490
+    nb_epoch = 10
+    nb_train_samples = 882
+    nb_validation_samples = 98
 
     model.fit_generator(
         train_generator,
-        steps_per_epoch=nb_train_samples / 16,
+        steps_per_epoch=nb_train_samples / nb_epoch,
         nb_epoch=nb_epoch,
         validation_data=validation_generator,
-        validation_steps=nb_validation_samples / 16,
+        validation_steps=nb_validation_samples / nb_epoch,
         verbose=1
     )
 
-    model.save_weights('models/cnn-inceptionv4-moods-old.h5')
+    model.save_weights('models/cnn-inceptionv4-moods.h5')
 

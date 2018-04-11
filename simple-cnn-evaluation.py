@@ -29,9 +29,9 @@ def main():
     model.add(Dropout(0.5))
     model.add(Dense(7, activation='softmax'))
 
-    model.load_weights('models/cnn-simple-moods-2.h5')
+    model.load_weights('models/cnn-simple-moods.h5')
 
-    img = image.load_img('./validation/afraid.jpg', target_size=(150,150))
+    img = image.load_img('./validation/sad.jpg', target_size=(150,150))
 
     x = image.img_to_array(img)
 

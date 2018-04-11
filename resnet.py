@@ -9,7 +9,6 @@ from PIL import ImageFile
 from keras.applications import InceptionV3
 from keras.engine import Model
 from keras.layers import Flatten, Dense, Input, GlobalAveragePooling2D
-from keras_vggface.vggface import VGGFace
 from tensorflow.python.client import device_lib
 
 import os
@@ -203,8 +202,8 @@ def main():
     model = resnet50_model(img_width, img_height, 3, 7)
 
     # Step 1 - Collect Data
-    train_data_dir = os.path.expanduser("moods-old/training")
-    validation_data_dir = os.path.expanduser("moods-old/validation")
+    train_data_dir = os.path.expanduser("moods/training")
+    validation_data_dir = os.path.expanduser("moods/validation")
 
     # Rescale the input pixels
     datagen = ImageDataGenerator(rescale=1./255)
@@ -220,26 +219,20 @@ def main():
             target_size=(img_width, img_height),
             batch_size=10)
 
-
-    print(model.summary())
-    for i, layer in enumerate(model.layers):
-       print(i, layer.name)
-
-
-    nb_epoch = 20
-    nb_train_samples = 4410
-    nb_validation_samples = 490
+    nb_epoch = 10
+    nb_train_samples = 882
+    nb_validation_samples = 98
 
     model.fit_generator(
             train_generator,
-            steps_per_epoch=nb_train_samples / 20,
+            steps_per_epoch=nb_train_samples / nb_epoch,
             nb_epoch=nb_epoch,
             validation_data=validation_generator,
-            validation_steps=nb_validation_samples / 20,
+            validation_steps=nb_validation_samples / nb_epoch,
             verbose=1
     )
 
-    model.save_weights('models/cnn-resnet50-moods-old.h5')
+    model.save_weights('models/cnn-resnet50-moods.h5')
 
 if __name__ == "__main__":
     main()

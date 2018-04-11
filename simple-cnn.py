@@ -20,8 +20,8 @@ def main():
 
     # Step 1 - Collect Data
     img_width, img_height = 150, 150
-    train_data_dir = os.path.expanduser("moods-old/training")
-    validation_data_dir = os.path.expanduser("moods-old/validation")
+    train_data_dir = os.path.expanduser("moods/training")
+    validation_data_dir = os.path.expanduser("moods/validation")
 
     # Rescale the input pixels
     datagen = ImageDataGenerator(rescale=1./255)
@@ -76,22 +76,22 @@ def main():
                   optimizer='rmsprop',
                   metrics=['accuracy', metrics.categorical_accuracy])
 
-    nb_epoch = 16
-    nb_train_samples = 4410
-    nb_validation_samples = 490
+    nb_epoch = 10
+    nb_train_samples = 882
+    nb_validation_samples = 98
 
     # we train our model again (this time fine-tuning the top 2 inception blocks
     # alongside the top Dense layers
     model.fit_generator(
         train_generator,
-        steps_per_epoch=nb_train_samples / 16,
+        steps_per_epoch=nb_train_samples / nb_epoch,
         nb_epoch=nb_epoch,
         validation_data=validation_generator,
-        validation_steps=nb_validation_samples / 16,
+        validation_steps=nb_validation_samples / nb_epoch,
         verbose=1
     )
 
-    model.save_weights('models/cnn-simple-moods-2.h5')
+    model.save_weights('models/cnn-simple-moods.h5')
 
 if __name__ == "__main__":
     main()

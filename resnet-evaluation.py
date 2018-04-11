@@ -193,9 +193,9 @@ def main():
     model = resnet50_model(img_width, img_height, 3, 7)
 
 
-    model.load_weights('models/cnn-resnet50-moods-old.h5')
+    model.load_weights('models/cnn-resnet50-moods.h5')
 
-    img = image.load_img('./validation/angry2.jpg', target_size=(img_width, img_height))
+    img = image.load_img('./validation/neutral.jpg', target_size=(img_width, img_height))
 
     x = image.img_to_array(img)
 
