@@ -278,7 +278,7 @@ def main():
     # Load our model
     model = inception_v4_model(img_width, img_height, channel, num_classes)
 
-    model.load_weights('models/cnn-inceptionv4-moods-old.h5')
+    model.load_weights('models/cnn-inceptionv4-moods.h5')
 
     img = image.load_img('./validation/afraid.jpg', target_size=(img_width,img_height))
 

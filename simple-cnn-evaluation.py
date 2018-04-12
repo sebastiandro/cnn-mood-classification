@@ -30,6 +30,7 @@ def main():
     model.add(Dense(7, activation='softmax'))
 
     model.load_weights('models/cnn-simple-moods.h5')
+    model.save("simple.h5")
 
     img = image.load_img('./validation/sad.jpg', target_size=(150,150))
 

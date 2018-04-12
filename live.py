@@ -2,24 +2,30 @@ import numpy as np
 import cv2
 from keras.models import load_model
 from densenet121 import densenet121_model
+from inceptionv4 import inception_v4_model
+from resnet import resnet50_model
 from keras.preprocessing import image
 from custom_layers.scale_layer import Scale
 
 cap = cv2.VideoCapture(0)
 
-img_width, img_height = 299, 299  # Resolution of inputs
+img_width, img_height = 299, 299# Resolution of inputs
 channel = 3
 num_classes = 7
 batch_size = 16
 
 # Load our model
 model = load_model('DenseNet121.h5', custom_objects={'Scale': Scale})
+#model = load_model('simple.h5')
+#model = load_model('resnet50.h5')
+#model = load_model('inception')
 #model = None;
+
 currentPrediction = "Neutral"
 
 def predict(img):
 
-    dst = cv2.resize(img, (299, 299), interpolation=cv2.INTER_CUBIC);
+    dst = cv2.resize(img, (img_width, img_height), interpolation=cv2.INTER_CUBIC);
     x = image.img_to_array(dst)
     x = np.divide(x, 255)
     x = np.expand_dims(x, axis=0)
